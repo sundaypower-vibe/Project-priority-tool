@@ -1,0 +1,63 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --sp-dark: #0d1117;
+  --sp-surface: #161b22;
+  --sp-border: #30363d;
+  --sp-accent: #f0a500;
+  --sp-green: #2ea043;
+  --sp-text: #e6edf3;
+  --sp-muted: #8b949e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--sp-dark);
+  color: var(--sp-text);
+  font-family: "Inter", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Table scroll */
+.table-container {
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+/* Status badge styles */
+.status-badge {
+  @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-medium whitespace-nowrap;
+}
+
+/* Editable cell */
+.editable-cell {
+  @apply w-full bg-transparent border-0 text-sp-text text-sm outline-none resize-none;
+  min-height: 1.5rem;
+}
+
+.editable-cell:focus {
+  @apply ring-1 ring-sp-accent rounded px-1;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--sp-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--sp-border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--sp-muted);
+}
