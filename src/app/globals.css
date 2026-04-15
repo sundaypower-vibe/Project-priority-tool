@@ -1,63 +1,299 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+@font-face {
+  font-family: 'Basel Grotesk';
+  font-weight: 400;
+  font-style: normal;
+  src: url('https://raw.githubusercontent.com/sundaypower/claude-design-tokens/main/fonts/Basel%20Grotesk%20Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Basel Grotesk';
+  font-weight: 500;
+  font-style: normal;
+  src: url('https://raw.githubusercontent.com/sundaypower/claude-design-tokens/main/fonts/Basel%20Grotesk%20Medium.woff2') format('woff2');
+}
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ── Brand tokens ───────────────────────────────────────────────────── */
 :root {
-  --sp-dark: #0d1117;
-  --sp-surface: #161b22;
-  --sp-border: #30363d;
-  --sp-accent: #f0a500;
-  --sp-green: #2ea043;
-  --sp-text: #e6edf3;
-  --sp-muted: #8b949e;
+  --spw-deep:    #090044;
+  --spw-deep7:   #1a1250;
+  --spw-deep14:  #2b245d;
+  --spw-white:   #fffff6;
+  --spw-white7:  #f2f2e8;
+  --spw-white14: #e5e5db;
+  --spw-yellow-01: #faffb4;
+  --spw-yellow-02: #f2ff80;
+  --spw-yellow-03: #e2ff06;
+
+  /* theme — light default */
+  --bg:              var(--spw-white);
+  --bg-illustration: var(--spw-white7);
+  --bg-card-hover:   var(--spw-white14);
+  --text:            var(--spw-deep);
+  --text-muted:      color-mix(in srgb, var(--text), transparent 45%);
+  --hr:              color-mix(in srgb, var(--text), transparent 75%);
+  --accent:          var(--spw-deep);
+  --accent-subtle:   var(--spw-deep7);
+  --btn-cta-bg:      var(--spw-yellow-03);
+  --btn-cta-text:    var(--spw-deep);
+  --btn-sec-bg:      var(--spw-white14);
+  --btn-sec-text:    var(--spw-deep);
+
+  --font: 'Basel Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  --pad:  1.5rem;
+  --gap:  1.5rem;
+  --r:    0.3rem;
 }
 
-* {
-  box-sizing: border-box;
+[data-theme="dark"] {
+  --bg:              var(--spw-deep);
+  --bg-illustration: var(--spw-deep7);
+  --bg-card-hover:   var(--spw-deep14);
+  --text:            var(--spw-white);
+  --accent:          var(--spw-yellow-03);
+  --accent-subtle:   var(--spw-yellow-01);
+  --btn-sec-bg:      var(--spw-deep14);
+  --btn-sec-text:    var(--spw-yellow-02);
 }
 
-body {
-  background-color: var(--sp-dark);
-  color: var(--sp-text);
-  font-family: "Inter", system-ui, sans-serif;
+/* ── Base ───────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.4;
+  font-weight: 400;
+  letter-spacing: 0.01em;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.4s ease, color 0.4s ease;
+  overflow-x: hidden;
 }
 
-/* Table scroll */
-.table-container {
-  overflow-x: auto;
-  overflow-y: visible;
+::selection { color: var(--spw-yellow-03); background: var(--spw-deep); }
+
+/* ── Scrollbar ──────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--hr); border-radius: 3px; }
+
+/* ── Table ──────────────────────────────────────────────────────────── */
+.sp-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 14px;
 }
 
-/* Status badge styles */
-.status-badge {
-  @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-medium whitespace-nowrap;
+.sp-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 10px var(--pad);
+  white-space: nowrap;
+  border-bottom: 1px solid var(--hr);
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.15s;
 }
 
-/* Editable cell */
-.editable-cell {
-  @apply w-full bg-transparent border-0 text-sp-text text-sm outline-none resize-none;
-  min-height: 1.5rem;
+.sp-table thead th:hover { color: var(--accent); }
+
+/* Hide button inside th */
+.sp-table thead th .col-hide-btn {
+  opacity: 0.35;
+  transition: opacity 0.15s, color 0.15s;
+  background: none; border: none; cursor: pointer;
+  color: var(--text-muted); padding: 0 2px; line-height: 1;
+  display: inline-flex; align-items: center; flex-shrink: 0;
+  font-size: 14px;
+}
+.sp-table thead th:hover .col-hide-btn { opacity: 1; }
+.sp-table thead th .col-hide-btn:hover { color: var(--text); opacity: 1; }
+
+/* Collapsed hidden column */
+:root {
+  --col-collapsed-bg: color-mix(in srgb, var(--spw-yellow-03), var(--bg) 82%);
+  --col-collapsed-bg-hover: color-mix(in srgb, var(--spw-yellow-03), var(--bg) 70%);
+}
+[data-theme="dark"] {
+  --col-collapsed-bg: color-mix(in srgb, var(--spw-yellow-03), var(--bg) 92%);
+  --col-collapsed-bg-hover: color-mix(in srgb, var(--spw-yellow-03), var(--bg) 86%);
 }
 
-.editable-cell:focus {
-  @apply ring-1 ring-sp-accent rounded px-1;
+.col-collapsed {
+  width: 26px !important;
+  min-width: 26px !important;
+  max-width: 26px !important;
+  padding: 0 0 8px 0 !important;
+  cursor: pointer;
+  background: var(--col-collapsed-bg) !important;
+  border-right: 1px solid var(--hr);
+  transition: background 0.15s;
+  vertical-align: bottom;
+  text-align: center;
+}
+.col-collapsed:hover { background: var(--col-collapsed-bg-hover) !important; }
+.col-collapsed-body {
+  width: 26px !important;
+  min-width: 26px !important;
+  max-width: 26px !important;
+  padding: 0 !important;
+  background: var(--col-collapsed-bg) !important;
+  border-right: 1px solid var(--hr);
+  border-bottom: none !important;
 }
 
-/* Scrollbar */
-::-webkit-scrollbar {
-  height: 6px;
-  width: 6px;
+.sp-table thead th.col-editable {
+  color: color-mix(in srgb, var(--spw-deep), transparent 20%);
 }
-::-webkit-scrollbar-track {
-  background: var(--sp-dark);
+
+[data-theme="dark"] .sp-table thead th.col-editable {
+  color: var(--spw-yellow-02);
 }
-::-webkit-scrollbar-thumb {
-  background: var(--sp-border);
-  border-radius: 3px;
+
+.sp-table thead th.sticky-col {
+  z-index: 20;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: var(--sp-muted);
+
+.sp-table tbody td {
+  padding: 10px var(--pad);
+  border-bottom: 1px solid var(--hr);
+  background: var(--bg);
+  font-weight: 400;
+  vertical-align: middle;
+  transition: background 0.12s;
 }
+
+.sp-table tbody tr:nth-child(even) td { background: var(--bg-illustration); }
+.sp-table tbody tr:hover td          { background: var(--bg-card-hover) !important; }
+
+/* Sticky body cell */
+.sticky-col {
+  position: sticky;
+  left: 0;
+  z-index: 5;
+}
+
+/* Editable column cells */
+.col-editable-cell {
+  background: color-mix(in srgb, var(--spw-yellow-03), var(--bg) 93%) !important;
+  padding: 4px 12px !important;
+  vertical-align: middle;
+}
+[data-theme="dark"] .col-editable-cell {
+  background: color-mix(in srgb, var(--spw-yellow-03), var(--bg) 96%) !important;
+}
+.sp-table tbody tr:hover .col-editable-cell {
+  background: color-mix(in srgb, var(--spw-yellow-03), var(--bg-card-hover) 88%) !important;
+}
+
+/* ── Editable textarea ──────────────────────────────────────────────── */
+.edit-field {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.3;
+  min-height: 16px;
+  padding: 0;
+  transition: box-shadow 0.15s;
+}
+.edit-field::placeholder { color: var(--text-muted); font-size: 12px; }
+.edit-field:focus {
+  box-shadow: 0 1px 0 0 var(--text);
+}
+
+/* ── Responsible select ─────────────────────────────────────────────── */
+.sp-select {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--hr);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 400;
+  padding: 0 16px 0 0;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='9' viewBox='0 0 24 24' fill='none' stroke='%23090044' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 2px center;
+  transition: border-color 0.15s;
+  line-height: 1.3;
+}
+[data-theme="dark"] .sp-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='9' viewBox='0 0 24 24' fill='none' stroke='%23fffff6' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+}
+.sp-select:focus { border-bottom-color: var(--text); }
+.sp-select option { background: var(--bg-illustration); color: var(--text); }
+
+/* ── Status dot ─────────────────────────────────────────────────────── */
+.status-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+/* ── Animations ─────────────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { opacity: 0; animation: fadeUp 0.3s ease forwards; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+.spin { animation: spin 0.8s linear infinite; }
+
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+.pulse { animation: pulse 1.5s ease-in-out infinite; }
+
+/* ── CTA button ─────────────────────────────────────────────────────── */
+.btn-cta {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 18px;
+  background: var(--btn-cta-bg);
+  color: var(--btn-cta-text);
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 400;
+  border: none;
+  border-radius: var(--r);
+  cursor: pointer;
+  transition: border-radius 0.2s ease-in-out, opacity 0.15s;
+  white-space: nowrap;
+}
+.btn-cta:hover:not(:disabled) { border-radius: 50px; }
+.btn-cta:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── Task list ───────────────────────────────────────────────────────── */
+.task-row:hover .task-delete-btn { opacity: 0.5 !important; }
+.task-row .task-delete-btn:hover { opacity: 1 !important; color: #ef4444 !important; }
+
+.task-row .task-drag-handle { opacity: 0.18; transition: opacity 0.15s; }
+.task-row:hover .task-drag-handle { opacity: 0.5; }
+.task-row .task-drag-handle:active { cursor: grabbing; }
+
+/* ── Board view ─────────────────────────────────────────────────────── */
+.board-col:hover .board-col-collapse-btn { opacity: 1 !important; }

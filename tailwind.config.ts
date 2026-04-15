@@ -8,20 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      colors: {
-        sp: {
-          dark: "#0d1117",
-          surface: "#161b22",
-          border: "#30363d",
-          accent: "#f0a500",
-          green: "#2ea043",
-          text: "#e6edf3",
-          muted: "#8b949e",
-        },
-      },
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
-        mono: ["JetBrains Mono", "monospace"],
+        sans: ["Outfit", "system-ui", "sans-serif"],
+        mono: ["IBM Plex Mono", "monospace"],
       },
     },
   },
